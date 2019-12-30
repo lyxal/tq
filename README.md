@@ -20,3 +20,13 @@ In the language, every sequence of items make up a meta-list; the meta-list may 
 # turns into .2, ".2". The string is outputted
 # as-is, therefore the output is .2".2".
 ```
+# Hello, World!
+It's just a boring indexing of the string "Hello, World!".
+```
+!"Hello, World!".1
+```
+# Explanation
+```
+!"Hello, World!"   # Make this string invisible in the final output
+                .1 # Access the first string in the list
+```
