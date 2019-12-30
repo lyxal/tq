@@ -70,3 +70,13 @@ In fact there is a shorthand for accessing the first item in the list.
       # cell, use the null (l) value.
     ) # Extend the current list forever
 ```
+# Infinite loop producing no output
+```
+l)
+```
+# Explanation
+```
+l  # Set the current item to the null value
+   # (this does not contribute to the output)
+ ) # Extend the list forever based on the previous pattern
+```
