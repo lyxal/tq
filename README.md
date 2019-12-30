@@ -46,3 +46,13 @@ In fact there is a shorthand for accessing the first item in the list.
   ~  # Transpose the input by the first dimension
    
 ```
+# Fibonacci sequence
+```
+11+|.2)
+```
+# Explanation
+```
+11      # Define the first 2 items in the infinite list: 1 and 1
+  +|.2  # Define the 3rd item as list item 1 plus list item 2
+      ) # Extend the list forever
+```
