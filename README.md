@@ -56,3 +56,17 @@ In fact there is a shorthand for accessing the first item in the list.
   +|.2  # Define the 3rd item as list item 1 plus list item 2
       ) # Extend the list forever
 ```
+# Truth machine
+```
+?'|x)
+```
+# Explanation
+```
+?     # Define the first item as an item from input
+  |   # Index the first item in the list
+ ' x  # OR it with a nil value (which auto-implies)
+      # deletion of the current cell.
+      # To actually store a nothing value in the current
+      # cell, use the null (l) value.
+    ) # Extend the current list forever
+```
