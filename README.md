@@ -30,3 +30,19 @@ It's just a boring indexing of the string "Hello, World!".
 !"Hello, World!"   # Make this string invisible in the final output
                 .1 # Access the first string in the list
 ```
+In fact there is a shorthand for accessing the first item in the list.
+```
+!"Hello, World!"|
+```
+# Cat program
+```
+!?~|
+```
+# Explanation
+```
+ ?   # Take a string from the input
+!    # Make the string invisible in the final output
+   | # Take the input
+  ~  # Transpose the input by the first dimension
+   
+```
