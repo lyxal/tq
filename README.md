@@ -80,3 +80,7 @@ l  # Set the current item to the null value
    # (this does not contribute to the output)
  ) # Extend the list forever based on the previous pattern
 ```
+# Prime tester
+```
+?'%|.2x)
+```
