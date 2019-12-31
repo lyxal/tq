@@ -1,5 +1,9 @@
 # tq
 In the language, every sequence of items make up a meta-list; the meta-list may be accessed arbitarily. (This language is inspired by [Jo King's Symbolic Raku quine.](https://codegolf.stackexchange.com/questions/69/golf-you-a-quine-for-great-good/197574#197574))
+
+The name itself stands for tail quote, which represents a list: the first item is the same as the second item, and the second item has one more quote-block than the first item.
+
+What's special about tq is that tq is lazy - you may access items in the main-list before they are even defined!
 # Non-cheating Quine program
 ```
 etq"etq"
