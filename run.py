@@ -45,13 +45,26 @@ for x,i in enumerate(prog):
 		continue
 
 	elif i in "+-*/%": # Infix addition
-		out.append(out.pop()+i)
+		if prog[x-1] not in 'prsthi?0123456789"\'':
+			# i.e. not a constant
+			# it's gonna be a monad
+			print(out)
+			out.append(i)
+			require -= 1
+			# Monads don't need requires
+			# I don't know why
+		else:
+			out.append(out.pop()+i)
 		require += 1
 		continue
 
 	elif i == "p":
 		# The previuous item of the current item.
-		out.append("prev("+str(len(out))+")")
+		out.append("prev("+str(len(out)-require)+")")
+
+	elif i == "r":
+		# 2 items before the current item.
+		out.append("prev2("+str(len(out)-require)+")")
 
 	elif i == "s":
 		# The succeeding item of the current item.
@@ -62,6 +75,10 @@ for x,i in enumerate(prog):
 
 	elif i == 'h': # Head
 		out.append("head()")
+
+	elif i == "i":
+		# The index of the current item
+		out.append(str(len(out)+1))
 
 	elif i == '?': # Get the next input
 		out.append("take_i()")
@@ -125,6 +142,11 @@ def head():
 def prev(i):
 	# The previous item of the current item
 	return eval(out[i-1])
+
+def prev2(i):
+	# A special built-in for 2 items before
+	# the current item
+	return eval(out[i-2])
 
 def succ(i):
 	# The next item of the current item
