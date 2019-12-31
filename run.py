@@ -6,6 +6,8 @@ prog = open(file_loc,encoding="ascii").read()
 
 read = [1]
 
+separ = ""
+
 # Turn the source code into a list
 
 out = []
@@ -13,114 +15,7 @@ str_cnt = 0
 require = 0
 input_counter = 0
 
-for x,i in enumerate(prog):
-	if str_cnt%2:
-		if i == '"' or i == "'":
-			str_cnt += 1
-		out.append(out.pop()+i)
-		continue
-
-	if i in "0123456789": # Number parser
-		if x==0 or prog[x-1] not in "+-*/%0123456789":
-			# If previous isn't a number:
-			# AND isn't an infix operation
-			out.append(i)
-		else:
-			out.append(out.pop()+i)
-
-	elif i == '"' or i == "'": # String parser
-		str_cnt += 1
-		if str_cnt%2:
-			out.append('"'if i=='"'else "'")
-
-	elif i in ".qe":
-		if i == '.': # Array indexer
-			out.append("index(")
-		elif i == 'q': # String quoter
-			out.append("quote(")
-		elif i == 'e': # eval
-			out.append("eval(")
-		require+=1
-
-		continue
-
-	elif i in "+-*/%": # Infix addition
-		if prog[x-1] not in 'prsthi?0123456789"\'':
-			# i.e. not a constant
-			# it's gonna be a monad
-			print(out)
-			out.append(i)
-			require -= 1
-			# Monads don't need requires
-			# I don't know why
-		else:
-			out.append(out.pop()+i)
-		require += 1
-		continue
-
-	elif i == "p":
-		# The previuous item of the current item.
-		out.append("prev("+str(len(out)-require)+")")
-
-	elif i == "r":
-		# 2 items before the current item.
-		out.append("prev2("+str(len(out)-require)+")")
-
-	elif i == "s":
-		# The succeeding item of the current item.
-		out.append("succ("+str(len(out))+")")
-
-	elif i == 't': # Tail
-		out.append("tail()")
-
-	elif i == 'h': # Head
-		out.append("head()")
-
-	elif i == "i":
-		# The index of the current item
-		out.append(str(len(out)+1))
-
-	elif i == '?': # Get the next input
-		out.append("take_i()")
-
-	while require:
-		if len(out)>1:
-			a,b=out.pop(),out.pop()
-			out.append(b+a)
-
-			# Count the quotes in the resulting string
-			quote_num = 0
-			for i in out[-1]:
-				if i == '"' or i == "'":
-					quote_num+=1
-
-			if quote_num%2==0:
-				out.append(out.pop()+")")
-			else:
-				out.append(out.pop())
-
-			require -= 1
-		else:
-			break
-
-# Add the missing quotes back
-
-lbk = 0
-rbk = 0
-
-for i in out[-1]:
-	if i == '(':
-		lbk+=1
-	elif i == ')':
-		rbk+=1
-
-if lbk>=rbk:
-	out[-1]+=")"*(lbk-rbk)
-else:
-	# Consider removing the abundant brackets
-	out[-1]=out[-1][:lbk-rbk]
-
-print(out)
+lenq = 0
 
 def quote(i):
 	# Basically an un-eval
@@ -157,5 +52,131 @@ def take_i():
 	# the current input counter
 	return read[input_counter%len(read)]
 
+def extend(i):
+	x = out
+	while 1:
+		x.insert(-1,quote(eval(i)))
+		print(x[-2],end=separ)
+		del x[0]
+	return x
+
+for x,i in enumerate(prog):
+	lenq = len(out)-require
+	if str_cnt%2:
+		if i == '"' or i == "'":
+			str_cnt += 1
+		out.append(out.pop()+i)
+		continue
+
+	if i in "0123456789": # Number parser
+		if x==0 or prog[x-1] not in "+-*/%0123456789":
+			# If previous isn't a number:
+			# AND isn't an infix operation
+			out.append(i)
+		else:
+			if prog[x-1]=="0":
+				# Leading zeros in decimals
+				# aren't permitted
+				out.append(i)
+			else:
+				out.append(out.pop()+i)
+
+	elif i == '"' or i == "'": # String parser
+		str_cnt += 1
+		if str_cnt%2:
+			out.append('"'if i=='"'else "'")
+
+	elif i in ".qe":
+		if i == '.': # Array indexer
+			out.append("index(")
+		elif i == 'q': # String quoter
+			out.append("quote(")
+		elif i == 'e': # eval
+			out.append("eval(")
+		require+=1
+
+		continue
+
+	elif i in "+-*/%": # Infix addition
+		if prog[x-1] not in 'prsthi?0123456789"\'':
+			# i.e. not a constant
+			# it's gonna be a monad
+			print(out)
+			out.append(i)
+			require -= 1
+			# Monads don't need requires
+			# I don't know why
+		else:
+			out.append(out.pop()+i)
+		require += 1
+		continue
+
+	elif i == "p":
+		# The previous item of the current item.
+		out.append("prev("+str(lenq)+")")
+
+	elif i == "r":
+		# 2 items before the current item.
+		out.append("prev2("+str(lenq)+")")
+
+	elif i == "s":
+		# The succeeding item of the current item.
+		out.append("succ("+str(len(out))+")")
+
+	elif i == 't': # Tail
+		out.append("tail()")
+
+	elif i == 'h': # Head
+		out.append("head()")
+
+	elif i == "i":
+		# The index of the current item
+		out.append(str(len(out)+1))
+
+	elif i == '?': # Get the next input
+		out.append("take_i()")
+
+	elif i == ')': # Extend out with the previous item
+		a = out.pop()
+		print(a)
+		out.append("extend("+quote(a)+")")
+
+	while require:
+		if len(out)>1:
+			a,b=out.pop(),out.pop()
+			out.append(b+a)
+
+			# Count the quotes in the resulting string
+			quote_num = 0
+			for i in out[-1]:
+				if i == '"' or i == "'":
+					quote_num+=1
+
+			if quote_num%2==0:
+				pass
+			#	out.append(out.pop()+")")
+			else:
+				out.append(out.pop())
+
+			require -= 1
+		else:
+			break
+
+# Add the missing quotes back
+
 for x,i in enumerate(out):
-	print(eval(i),end="")
+	for j in i:
+		lbk = 0
+		rbk = 0
+		if j == '(':
+			lbk+=1
+		elif j == ')':
+			rbk+=1
+		if lbk>=rbk:
+			out[x]+=")"*(lbk-rbk)
+		else:
+			# Consider removing the abundant brackets
+			out[x]=out[x][:lbk-rbk]
+
+for x,i in enumerate(out):
+	print(eval(i),end=separ)
