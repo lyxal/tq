@@ -20,7 +20,7 @@ etq"etq"
 # turns into .2, ".2". The string is outputted
 # as-is, therefore the output is .2".2".
 ```
-# Hello, World!
+# Hello, World! [works up to here]
 It's just a boring indexing of the string "Hello, World!".
 ```
 "Hello, World!"
