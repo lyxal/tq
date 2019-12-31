@@ -1,8 +1,8 @@
-# Mystery-language
-In the language, every sequence of items make up a meta-list; the meta-list may be accessed arbitarily.
+# tq
+In the language, every sequence of items make up a meta-list; the meta-list may be accessed arbitarily. (This language is inspired by [Jo King's Symbolic Raku quine.](https://codegolf.stackexchange.com/questions/69/golf-you-a-quine-for-great-good/197574#197574))
 # Non-cheating Quine program
 ```
-.2".2"
+etq"etq"
 ```
 # Explanation
 ```
@@ -23,17 +23,14 @@ In the language, every sequence of items make up a meta-list; the meta-list may 
 # Hello, World!
 It's just a boring indexing of the string "Hello, World!".
 ```
-!"Hello, World!".1
+"Hello, World!"
 ```
 # Explanation
 ```
-!"Hello, World!"   # Make this string invisible in the final output
-                .1 # Access the first string in the list
+"Hello, World!" # Make this string invisible in the final output
+                # Access the first string in the list
 ```
-In fact there is a shorthand for accessing the first item in the list.
-```
-!"Hello, World!"|
-```
+In fact there is a shorthand for accessing the first item in the list. ```|```
 # Cat program
 ```
 !?~|
