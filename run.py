@@ -12,6 +12,8 @@ require = 0
 
 for x,i in enumerate(prog):
 	if str_cnt%2:
+		if i == '"' or i == "'":
+			str_cnt += 1
 		out.append(out.pop()+i)
 		continue
 
@@ -43,12 +45,19 @@ for x,i in enumerate(prog):
 		out.append(out.pop()+i)
 		continue
 
-	elif i in "p":
+	elif i == "p":
 		# The previuous item of the current item.
 		out.append("prev("+str(len(out))+")")
 
+	elif i == "s":
+		# The succeeding item of the current item.
+		out.append("succ("+str(len(out))+")")
+
 	elif i == 't': # Tail
 		out.append("tail()")
+
+	elif i == 'h': # Head
+		out.append("head()")
 
 	while require:
 		a,b=out.pop(),out.pop()
@@ -93,10 +102,17 @@ def tail():
 	# Return the last item of the list
 	return eval(out[-1])
 
+def head():
+	# Return the first item of the list
+	return eval(out[0])
+
 def prev(i):
 	# The previous item of the current item
-	print(out[i-1])
-	return
+	return eval(out[i-1])
+
+def succ(i):
+	# The next item of the current item
+	return eval(out[i+1])
 
 for x,i in enumerate(out):
 	print(eval(i),end="")
