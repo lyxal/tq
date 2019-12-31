@@ -1,10 +1,4 @@
-from sys import argv
-
-file_loc = argv[1]
-
-prog = open(file_loc,encoding="ascii").read()
-
-read = [1]
+read = [1] # Your input goes here
 
 separ = ""
 
@@ -56,7 +50,7 @@ def extend(i):
 	x = out
 	while 1:
 		x.insert(-1,quote(eval(i)))
-		print(x[-2],end=separ)
+		print(eval(x[-2]),end=separ)
 		del x[0]
 	return x
 
@@ -101,7 +95,6 @@ for x,i in enumerate(prog):
 		if prog[x-1] not in 'prsthi?0123456789"\'':
 			# i.e. not a constant
 			# it's gonna be a monad
-			print(out)
 			out.append(i)
 			require -= 1
 			# Monads don't need requires
@@ -138,7 +131,6 @@ for x,i in enumerate(prog):
 
 	elif i == ')': # Extend out with the previous item
 		a = out.pop()
-		print(a)
 		out.append("extend("+quote(a)+")")
 
 	while require:
@@ -154,7 +146,6 @@ for x,i in enumerate(prog):
 
 			if quote_num%2==0:
 				pass
-			#	out.append(out.pop()+")")
 			else:
 				out.append(out.pop())
 
@@ -179,4 +170,7 @@ for x,i in enumerate(out):
 			out[x]=out[x][:lbk-rbk]
 
 for x,i in enumerate(out):
-	print(eval(i),end=separ)
+	if eval(i)=="":
+		continue
+	else:
+		print(eval(i),end=separ)
