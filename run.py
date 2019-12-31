@@ -16,8 +16,9 @@ for x,i in enumerate(prog):
 		continue
 
 	if i in "0123456789": # Number parser
-		if x==0 or prog[x-1] not in "0123456789":
+		if x==0 or prog[x-1] not in "+-*/%0123456789":
 			# If previous isn't a number:
+			# AND isn't an infix operation
 			out.append(i)
 		else:
 			out.append(out.pop()+i)
@@ -37,6 +38,14 @@ for x,i in enumerate(prog):
 		require+=1
 
 		continue
+
+	elif i in "+-*/%": # Infix addition
+		out.append(out.pop()+i)
+		continue
+
+	elif i in "p":
+		# The previuous item of the current item.
+		out.append("prev("+str(len(out))+")")
 
 	elif i == 't': # Tail
 		out.append("tail()")
@@ -83,6 +92,11 @@ def index(i):
 def tail():
 	# Return the last item of the list
 	return eval(out[-1])
+
+def prev(i):
+	# The previous item of the current item
+	print(out[i-1])
+	return
 
 for x,i in enumerate(out):
 	print(eval(i),end="")
