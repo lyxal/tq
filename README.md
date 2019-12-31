@@ -6,19 +6,15 @@ etq"etq"
 ```
 # Explanation
 ```
-.2     # We index into the main list
-       # and select the second item
-       # of the string into this index
-       # Now we are starting a new item
-       # of the meta-list.
-  ".2" # This is just a string describing
-       # the first part of the list.
-       # Then, the list is implicitly outputted
-       # without any delimiters.
+   'etq' # Define the second item of the list
+         # As a string
+  q      # Surround the string with quotes
+ t       # For the first item of the list,
+         # Access the last (tail) item in the list,
+e        # and evaluate the accessed value.
 
-# Our constructed list is [a[2],".2"], which
-# turns into .2, ".2". The string is outputted
-# as-is, therefore the output is .2".2".
+# The list becomes et,q'etq' (comma is for readability)
+# , which then becomes foreach-printed without any separator.
 ```
 # Hello, World! [works up to here]
 It's just a boring indexing of the string "Hello, World!".
