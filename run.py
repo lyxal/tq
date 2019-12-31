@@ -4,11 +4,14 @@ file_loc = argv[1]
 
 prog = open(file_loc,encoding="ascii").read()
 
+read = [1]
+
 # Turn the source code into a list
 
 out = []
 str_cnt = 0
 require = 0
+input_counter = 0
 
 for x,i in enumerate(prog):
 	if str_cnt%2:
@@ -43,6 +46,7 @@ for x,i in enumerate(prog):
 
 	elif i in "+-*/%": # Infix addition
 		out.append(out.pop()+i)
+		require += 1
 		continue
 
 	elif i == "p":
@@ -59,35 +63,47 @@ for x,i in enumerate(prog):
 	elif i == 'h': # Head
 		out.append("head()")
 
+	elif i == '?': # Get the next input
+		out.append("take_i()")
+
 	while require:
-		a,b=out.pop(),out.pop()
-		out.append(b+a)
+		if len(out)>1:
+			a,b=out.pop(),out.pop()
+			out.append(b+a)
 
-		# Count the quotes in the resulting string
-		quote_num = 0
-		for i in out[-1]:
-			if i == '"' or i == "'":
-				quote_num+=1
+			# Count the quotes in the resulting string
+			quote_num = 0
+			for i in out[-1]:
+				if i == '"' or i == "'":
+					quote_num+=1
 
-		if quote_num%2==0:
-			out.append(out.pop()+")")
+			if quote_num%2==0:
+				out.append(out.pop()+")")
+			else:
+				out.append(out.pop())
+
+			require -= 1
 		else:
-			out.append(out.pop())
-
-		require -= 1
-
+			break
 
 # Add the missing quotes back
 
 lbk = 0
 rbk = 0
+
 for i in out[-1]:
 	if i == '(':
 		lbk+=1
 	elif i == ')':
 		rbk+=1
 
-out[-1]+=")"*(lbk-rbk)
+if lbk>=rbk:
+	out[-1]+=")"*(lbk-rbk)
+else:
+	# Consider removing the abundant brackets
+	out[-1]=out[-1][:lbk-rbk]
+
+print(out)
 
 def quote(i):
 	# Basically an un-eval
@@ -113,6 +129,11 @@ def prev(i):
 def succ(i):
 	# The next item of the current item
 	return eval(out[i+1])
+
+def take_i():
+	# Take the input based on
+	# the current input counter
+	return read[input_counter%len(read)]
 
 for x,i in enumerate(out):
 	print(eval(i),end="")
