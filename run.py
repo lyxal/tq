@@ -13,8 +13,8 @@ lenq = 0
 
 def quote(i):
     # Basically an un-eval
-    return str([i])[1:-1]
-
+    # Use the built-in.
+    return repr(i)
 
 def index(i):
     # For the convenience of non-programmers,
