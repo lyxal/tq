@@ -13,7 +13,8 @@ lenq = 0
 
 def quote(i):
 	# Basically an un-eval
-	return str([i])[1:-1]
+	# Use the built-in.
+	return repr(i)
 
 def index(i):
 	# For the convenience of non-programmers,
@@ -46,9 +47,9 @@ def take_i():
 	# the current input counter
 	return read[input_counter%len(read)]
 
-def extend(i):
+def extend(i,cond=1):
 	x = out
-	while 1:
+	while cond:
 		x.insert(-1,quote(eval(i)))
 		print(eval(x[-2]),end=separ)
 		del x[0]
@@ -80,13 +81,15 @@ for x,i in enumerate(prog):
 		if str_cnt%2:
 			out.append('"'if i=='"'else "'")
 
-	elif i in ".qe":
+	elif i in ".qe(":
 		if i == '.': # Array indexer
 			out.append("index(")
 		elif i == 'q': # String quoter
 			out.append("quote(")
 		elif i == 'e': # eval
 			out.append("eval(")
+		elif i == '(': # Conditional extension
+			out.append("extend("+quote(out.pop())+",")
 		require+=1
 
 		continue
